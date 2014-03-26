@@ -4,8 +4,8 @@
         "args": "-h {options.host} -p {options.port} -U \"{options.username}\" -d \"{options.database}\"",
         "queries": {
             "desc" : {
-                "query": "\\dt",
-                "options": ["-t"],
+                "query": "\\dt *.",
+                "options": [" -t"],
                 "format" : "|%s|"
             },
             "desc table": {

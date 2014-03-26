@@ -36,7 +36,7 @@ class Connection:
         tables = []
         for result in command.run().splitlines():
             try:
-                tables.append(result.split('|')[1].strip())
+                tables.append(result.split('|')[0].strip() + '.' + result.split('|')[1].strip())
             except IndexError:
                 pass
 
