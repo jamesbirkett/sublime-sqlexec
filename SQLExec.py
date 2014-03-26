@@ -44,9 +44,31 @@ class Connection:
 
         return tables
 
+    def descf(self):
+        query = self.settings['queries']['descf']['query']
+        command = self._getCommand(self.settings['queries']['descf']['options'], query)
+
+        functions = []
+        for result in command.run().splitlines():
+            try:
+                functions.append(result.split('|')[0].strip() + '.' + result.split('|')[1].strip())
+            except IndexError:
+                pass
+
+        os.unlink(self.tmp.name)
+
+        return functions
+
     def descTable(self, tableName):
         query = self.settings['queries']['desc table']['query'] % tableName
         command = self._getCommand(self.settings['queries']['desc table']['options'], query)
+        command.show()
+
+        os.unlink(self.tmp.name)
+
+    def descFunction(self, functionName):
+        query = self.settings['queries']['desc function']['query'] % functionName
+        command = self._getCommand(self.settings['queries']['desc function']['options'], query)
         command.show()
 
         os.unlink(self.tmp.name)
@@ -148,6 +170,15 @@ def descTable(index):
         else:
             sublime.error_message('No active connection')
 
+def descFunction(index):
+    global connection
+    if index > -1:
+        if connection != None:
+            functions = connection.descf()
+            connection.descFunction(functions[index])
+        else:
+            sublime.error_message('No active connection')
+
 def executeHistoryQuery(index):
     global history
     if index > -1:
@@ -171,6 +202,15 @@ class sqlDesc(sublime_plugin.WindowCommand):
         if connection != None:
             tables = connection.desc()
             sublime.active_window().show_quick_panel(tables, descTable)
+        else:
+            sublime.error_message('No active connection')
+
+class sqlDescF(sublime_plugin.WindowCommand):
+    def run(self):
+        global connection
+        if connection != None:
+            functions = connection.descf()
+            sublime.active_window().show_quick_panel(functions, descFunction)
         else:
             sublime.error_message('No active connection')
 

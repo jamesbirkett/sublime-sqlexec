@@ -8,8 +8,18 @@
                 "options": [" -t"],
                 "format" : "|%s|"
             },
+            "descf" : {
+                "query": "\\df *.",
+                "options": [],
+                "format" : "|%s|"
+            },
             "desc table": {
                 "query": "\\d %s",
+                "options": [],
+                "format" : "|%s|"
+            },
+            "desc function": {
+                "query": "\\df %s",
                 "options": [],
                 "format" : "|%s|"
             },
